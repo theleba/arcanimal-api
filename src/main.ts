@@ -4,14 +4,17 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import * as express from 'express';
 import { ExpressAdapter } from '@nestjs/platform-express';
-import { join } from 'path';
+import * as bodyParser from 'body-parser';
+import * as path from 'path';
 
 async function bootstrap() {
 
-    const server = express(); 
-  server.use('/uploads', express.static(join(__dirname, '..', 'uploads'))); 
 
-  const app = await NestFactory.create(AppModule, new ExpressAdapter(server)); 
+  const app = await NestFactory.create(AppModule);
+  app.use('/uploads', express.static('/usr/src/app/uploads'));
+  
+  app.use(bodyParser.json({ limit: '50mb' }));  
+  app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
    app.useGlobalPipes(new ValidationPipe({
     whitelist: true, 

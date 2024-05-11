@@ -61,7 +61,13 @@ export class CreatePetDto {
   @IsBoolean()
   found: boolean;
 
+  @ApiProperty({ description: 'ShelderId' })
   @IsNotEmpty()
   @IsInt()
   shelterId: number; 
+
+  @ApiProperty({ description: 'UserId' })
+  @IsNotEmpty()
+  @IsInt()
+  updatedBy: number; 
 }

@@ -6,10 +6,16 @@ import { PetController } from './pet/pet.controller';
 import { ShelterController } from './shelter/shelter.controller';
 import { PetService } from './pet/pet.service';
 import { ShelterService } from './shelter/shelter.service';
+import { ImagesService } from './images/images.service';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true, 
+    }),
+  ],
   controllers: [UserController, PetController, ShelterController],
-  providers: [UserService, PetService, ShelterService, PrismaService] ,
+  providers: [UserService, PetService, ShelterService, PrismaService, ImagesService] ,
 })
 export class AppModule {}

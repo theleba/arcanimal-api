@@ -2,30 +2,30 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
 import { CreatePetDto } from './dto/create-pet.dto';
 import { UpdatePetDto } from './dto/update-pet.dto';
-import { FileService } from 'src/file/file.service';
+import { ImagesService } from 'src/images/images.service';
 
 @Injectable()
 export class PetService {
-  constructor(private prisma: PrismaService, private fileService: FileService) {}
+  constructor(private prisma: PrismaService, private imagesService: ImagesService) {}
 
   async create(createPetDto: CreatePetDto) {
-    const { shelterId, imageBase64, ...rest } = createPetDto;
+        const { shelterId, imageBase64, ...rest } = createPetDto;
 
-    let url: string | null = null;
-    if (imageBase64) {
-      url = await this.fileService.saveImage(imageBase64);
+        let imagePath = null;
+        if (imageBase64) {
+            imagePath = await this.imagesService.saveImage(imageBase64);
+        }
+
+        return this.prisma.pet.create({
+            data: {
+                ...rest,
+                Shelter: {
+                    connect: { id: shelterId },
+                },
+                url: imagePath
+            },
+        });
     }
-
-    return this.prisma.pet.create({
-      data: {
-        ...rest,
-        url, 
-        Shelter: {
-          connect: { id: shelterId },
-        },
-      },
-    });
-  }
 
   async findAll(page: number, limit: number) {
 

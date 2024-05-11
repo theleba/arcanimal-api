@@ -38,4 +38,9 @@ export class CreateShelterDto {
   @ApiProperty({ description: 'Current needs of the shelter' })
   @IsString()
   needs: string;
+
+  @ApiProperty({ description: 'UserId' })
+  @IsNotEmpty()
+  @IsInt()
+  updatedBy: number; 
 }

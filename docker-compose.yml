@@ -9,6 +9,7 @@ services:
       - DATABASE_URL=${DATABASE_URL}
     volumes:
       - ./src:/usr/src/app/src 
+      - ./uploads:/usr/src/app/uploads
     depends_on:
       - db
     restart: on-failure

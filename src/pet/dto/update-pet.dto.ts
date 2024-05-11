@@ -1,5 +1,5 @@
-import { IsBoolean, IsOptional, IsString, IsUrl } from 'class-validator';
-import { ApiPropertyOptional } from '@nestjs/swagger';
+import { IsBoolean, IsInt, IsNotEmpty, IsOptional, IsString, IsUrl } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class UpdatePetDto {
   @ApiPropertyOptional({ description: 'Location where the pet was found or is located' })
@@ -56,4 +56,9 @@ export class UpdatePetDto {
   @IsBoolean()
   @IsOptional()
   found?: boolean;
+
+  @ApiProperty({ description: 'UserId' })
+  @IsNotEmpty()
+  @IsInt()
+  updatedBy: number; 
 }

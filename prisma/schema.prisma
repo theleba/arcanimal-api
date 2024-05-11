@@ -19,7 +19,12 @@ model Pet {
   name      String
   url       String
   found     Boolean
+  details   String
   shelterId Int      
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  updatedBy  Int   
+
   Shelter   Shelter  @relation(fields: [shelterId], references: [id])
 }
 
@@ -29,6 +34,9 @@ model User {
   phone String
   email String @unique
   role  Role
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  updatedBy  Int   
 }
 
 model Shelter {
@@ -41,10 +49,22 @@ model Shelter {
   occupation  Int
   description String
   needs       String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  updatedBy  Int   
+
   Pets        Pet[]
+}
+
+model Image {
+  id        Int     @id @default(autoincrement())
+  filePath  String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
 
 enum Role {
   admin
   volunteer
 }
+

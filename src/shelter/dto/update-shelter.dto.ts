@@ -1,5 +1,5 @@
-import { IsEmail, IsInt, IsOptional, IsString, Min } from 'class-validator';
-import { ApiPropertyOptional } from '@nestjs/swagger';
+import { IsEmail, IsInt, IsNotEmpty, IsOptional, IsString, Min } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class UpdateShelterDto {
   @ApiPropertyOptional({ description: 'Location of the shelter' })
@@ -43,4 +43,9 @@ export class UpdateShelterDto {
   @IsString()
   @IsOptional()
   needs?: string;
+
+  @ApiProperty({ description: 'UserId' })
+  @IsNotEmpty()
+  @IsInt()
+  updatedBy: number; 
 }
