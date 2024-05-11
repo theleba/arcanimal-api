@@ -1,0 +1,29 @@
+services:
+  app:
+    container_name: arcanimal_app
+    build: .
+    command: yarn run start:dev
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+    volumes:
+      - ./src:/usr/src/app/src 
+    depends_on:
+      - db
+    restart: on-failure
+
+  db:
+    container_name: arcanimal_db
+    image: postgres:16
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: arcanimal_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
