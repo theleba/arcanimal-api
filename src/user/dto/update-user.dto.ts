@@ -18,6 +18,10 @@ export class UpdateUserDto {
   @IsOptional()
   email?: string;
 
+  @ApiPropertyOptional({ description: 'Password of the user' })
+  @IsString()
+  password: string;
+
   @ApiPropertyOptional({ description: 'Role of the user in the system', enum: ['admin', 'volunteer'] })
   @IsEnum(Role)
   role?: Role;

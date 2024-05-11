@@ -18,6 +18,10 @@ export class CreateUserDto {
   @IsEmail()
   email: string;
 
+  @ApiProperty({ description: 'Password of the user' })
+  @IsString()
+  password: string;
+
   @ApiProperty({ description: 'Role of the user in the system', enum: ['admin', 'volunteer'] })
   @IsEnum(Role)
   role: Role;

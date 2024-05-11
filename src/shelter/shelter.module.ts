@@ -5,6 +5,7 @@ import { PrismaService } from 'prisma/prisma.service';
 
 @Module({
   controllers: [ShelterController],
-  providers: [ShelterService, PrismaService]
+  providers: [ShelterService, PrismaService],
+  exports: [ShelterService]
 })
 export class ShelterModule {}

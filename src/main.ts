@@ -32,7 +32,22 @@ async function bootstrap() {
     .build();
   
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('api', app, document, {
+  swaggerOptions: {
+    authAction: {
+      BearerAuth: {
+        name: 'Bearer',
+        schema: {
+          type: 'http',
+          in: 'header',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
+        value: 'Bearer <JWT>',
+      },
+    },
+  },
+});
 
   await app.listen(3000);
 }

@@ -3,10 +3,13 @@ import { PrismaService } from 'prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Role } from 'src/enums/role.enum';
+import { AuthService } from 'src/auth/auth.service';
+import { UserReadDto } from './dto/read-user.dto';
 
 @Injectable()
 export class UserService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService, private authService: AuthService) {}
+
 
   async createAdmin(createUserDto: CreateUserDto) {
 
@@ -20,14 +23,32 @@ export class UserService {
       throw new ConflictException('Email already exists');
     }
 
+  const hashedPassword = await this.authService.hashPassword(createUserDto.password);
 
-  return this.prisma.user.create({
+  const user = this.prisma.user.create({
     data: {
       ...createUserDto,
+      password: hashedPassword,
       role: Role.Admin, 
     },
   });
+
+  return this.toReadUser(user)
+
 }
+
+ private toReadUser(user: any): UserReadDto {
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      phone: user.phone,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt
+    };
+  }
+
 
  async createVolunteer(createUserDto: CreateUserDto) {
 
@@ -41,12 +62,17 @@ export class UserService {
       throw new ConflictException('Email already exists');
     }
 
-  return this.prisma.user.create({
+  const hashedPassword = await this.authService.hashPassword(createUserDto.password);
+
+  const user = this.prisma.user.create({
     data: {
       ...createUserDto,
+      password: hashedPassword,
       role: Role.Volunteer, 
     },
   });
+
+  return this.toReadUser(user)
 }
 
   async findAll(page: number, limit: number) {
@@ -77,22 +103,31 @@ export class UserService {
     return this.prisma.user.findMany();
   }
 
+   async findOne(email: string) {
+    return this.prisma.user.findUnique({
+      where: { email },
+    });
+  }
+
   async update(id: number, updateUserDto: UpdateUserDto) {
 
-  
-
     if(updateUserDto.email) {
-     const existingUser = await this.prisma.shelter.findUnique({
-      where: {
-        email: updateUserDto.email,
-      },
-    });
+      const existingUser = await this.prisma.shelter.findUnique({
+        where: {
+          email: updateUserDto.email,
+        },
+      });
 
-    if (existingUser && existingUser.id !== id) {
-      throw new ConflictException('Email already exists');
-    }
+      if (existingUser && existingUser.id !== id) {
+        throw new ConflictException('Email already exists');
+      }
     }
 
+    if(updateUserDto.password){
+      const hashedPassword = await this.authService.hashPassword(updateUserDto.password);
+      updateUserDto.password = hashedPassword
+    }
+     
 
     return this.prisma.user.update({
       where: { id: id },

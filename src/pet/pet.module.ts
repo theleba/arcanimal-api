@@ -6,6 +6,7 @@ import { ImagesService } from 'src/images/images.service';
 
 @Module({
   controllers: [PetController],
-  providers: [ImagesService, PetService, PrismaService]
+  providers: [ImagesService, PetService, PrismaService],
+  exports:[PetService]
 })
 export class PetModule {}

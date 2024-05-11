@@ -33,6 +33,7 @@ model User {
   name  String
   phone String
   email String @unique
+  password String
   role  Role
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
