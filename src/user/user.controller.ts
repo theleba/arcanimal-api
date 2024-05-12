@@ -53,7 +53,6 @@ export class UserController {
   @ApiOperation({ summary: 'Create a new volunteer' })
   @ApiResponse({ status: 201, description: 'Volunteer created successfully.' })
   async createVolunteer(@Body() createUserDto: CreateUserDto, @GetUserId() userId: number) {
-    console.log('Creating admin by user ID:', userId);  // Você pode ver o userId no console
     return this.userService.createVolunteer(createUserDto, userId);
   }
 
@@ -61,9 +60,8 @@ export class UserController {
   @ApiOperation({ summary: 'Create a new admin' })
   @ApiResponse({ status: 201, description: 'Admin created successfully.' })
   async createAdmin(@Body() createUserDto: CreateUserDto, @GetUserId() userId: number) {
-    console.log('Creating admin by user ID:', userId);  // Você pode ver o userId no console
     return this.userService.createAdmin(createUserDto, userId);
   }
-
+ 
  
 }

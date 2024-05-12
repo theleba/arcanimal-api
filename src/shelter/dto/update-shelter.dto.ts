@@ -7,6 +7,11 @@ export class UpdateShelterDto {
   @IsOptional()
   location?: string;
 
+  @ApiPropertyOptional({ description: 'Address of the shelter' })
+  @IsNotEmpty()
+  @IsString()
+  address: string;
+
   @ApiPropertyOptional({ description: 'Name of the shelter' })
   @IsString()
   @IsOptional()
@@ -34,14 +39,19 @@ export class UpdateShelterDto {
   @IsOptional()
   occupation?: number;
 
-  @ApiPropertyOptional({ description: 'Detailed description of the shelter', example:'' })
+  @ApiPropertyOptional({ description: 'Detailed owner of the shelter', example:'' })
   @IsString()
   @IsOptional()
-  description?: string;
+  owner?: string;
 
   @ApiPropertyOptional({ description: 'Current needs of the shelter' })
   @IsArray()
   @IsOptional()
   needs?: string[];
+
+  @ApiPropertyOptional({ description: 'Other needs of the shelter' })
+  @IsArray()
+  @IsOptional()
+  other_needs?: string[];
 
 }

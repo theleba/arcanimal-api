@@ -44,13 +44,15 @@ model User {
 model Shelter {
   id          Int    @id @default(autoincrement())
   location    String
+  address     String? 
   name        String
   email       String @unique
   phone       String
   capacity    Int
   occupation  Int
-  description String?
-  needs       String[]
+  owner String?
+  needs       String[] @default([])
+  other_needs String[] @default([])
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   updatedBy   Int   

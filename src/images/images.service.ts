@@ -25,21 +25,17 @@ export class ImagesService {
         const dirname = path.dirname(filePath);
         try {
             await fsPromises.access(dirname);
-            console.log(`Directory exists: ${dirname}`);
         } catch (e) {
-            console.log(`Directory not found, creating: ${dirname}`);
             await fsPromises.mkdir(dirname, { recursive: true });
         }
     }
 
     private async saveBase64AsFile(base64: string, filePath: string): Promise<void> {
-        console.log(`Saving file to: ${filePath}`);
         const base64Data = base64.replace(/^data:image\/\w+;base64,/, '');
         const buffer = Buffer.from(base64Data, 'base64');
 
         await this.ensureDirectoryExistence(filePath);
         await fsPromises.writeFile(filePath, buffer);
-        console.log(`File saved: ${filePath}`);
     }
 
 }

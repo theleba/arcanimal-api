@@ -32,7 +32,6 @@ export class ShelterService {
     filters?: { localOccupation?: number; location?: string };
   }) {
     const { pagination, filters } = findOptions;
-    console.log(filters);
     const queryParams: Prisma.ShelterFindManyArgs = {
       where: {},
     };
@@ -45,7 +44,6 @@ export class ShelterService {
 
     if (filters) {
       const { localOccupation, location } = filters;
-      console.log(localOccupation);
 
       if (localOccupation) {
         queryParams.where.occupation = {
@@ -57,7 +55,6 @@ export class ShelterService {
         queryParams.where.location = location;
       }
     }
-    console.log(queryParams);
 
     const filteredShelters = this.prisma.shelter.findMany(queryParams);
 

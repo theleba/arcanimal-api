@@ -3,9 +3,7 @@ import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import * as express from 'express';
-import { ExpressAdapter } from '@nestjs/platform-express';
 import * as bodyParser from 'body-parser';
-import * as path from 'path';
 import * as dotenv from 'dotenv';
 dotenv.config();
 

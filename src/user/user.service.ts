@@ -5,10 +5,12 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { Role } from 'src/enums/role.enum';
 import { AuthService } from 'src/auth/auth.service';
 import { UserReadDto } from './dto/read-user.dto';
+import { EmailService } from 'src/mail/mail.service';
+import { generateRandomPassword } from 'src/utils/generateRandomPassword';
 
 @Injectable()
 export class UserService {
-  constructor(private prisma: PrismaService, private authService: AuthService) {}
+  constructor(private prisma: PrismaService, private authService: AuthService, private mailService: EmailService) {}
 
 private toReadUser(user: any): UserReadDto {
     return {
@@ -75,7 +77,8 @@ private toReadUser(user: any): UserReadDto {
       throw new ConflictException('Email already exists');
     }
 
-  const hashedPassword = await this.authService.hashPassword(createUserDto.password);
+  const defaultPassword = generateRandomPassword(8);
+  const hashedPassword = await this.authService.hashPassword(defaultPassword);
 
   const user = await this.prisma.user.create({
     data: {
@@ -84,6 +87,12 @@ private toReadUser(user: any): UserReadDto {
       role: Role.Volunteer, 
       updatedBy: createdByUserId,
     },
+  });
+
+ await this.mailService.sendWelcomeEmail({
+    name: user.name,
+    email: user.email, 
+    password: defaultPassword
   });
 
   return this.toReadUser(user)
@@ -163,3 +172,4 @@ private toReadUser(user: any): UserReadDto {
 
   
 }
+
