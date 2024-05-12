@@ -1,0 +1,72 @@
+generator client {
+  provider = "prisma-client-js"
+  seed = "ts-node prisma/seed.ts"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Pet {
+  id        Int      @id @default(autoincrement())
+  location  String
+  contact   String
+  gender    String
+  breed     String
+  size      String
+  type      String  
+  color     String
+  name      String
+  url       String
+  found     Boolean
+  details   String
+  shelterId Int?       
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  updatedBy  Int   
+
+  Shelter   Shelter?  @relation(fields: [shelterId], references: [id])
+}
+
+model User {
+  id    Int    @id @default(autoincrement())
+  name  String
+  phone String
+  email String @unique
+  password String
+  role  Role
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  updatedBy  Int   
+}
+
+model Shelter {
+  id          Int    @id @default(autoincrement())
+  location    String
+  name        String
+  email       String @unique
+  phone       String
+  capacity    Int
+  occupation  Int
+  description String?
+  needs       String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  updatedBy   Int   
+
+  Pets        Pet[]
+}
+
+model Image {
+  id        Int     @id @default(autoincrement())
+  filePath  String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+enum Role {
+  admin
+  volunteer
+}
+
