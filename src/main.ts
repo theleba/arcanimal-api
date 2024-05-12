@@ -31,7 +31,7 @@ async function bootstrap() {
   .setVersion('1.0')
   .addBearerAuth(
     { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
-    'BearerAuth', // Este é o nome da segurança que será usado nas operações
+    'BearerAuth', 
   )
   .build();
   

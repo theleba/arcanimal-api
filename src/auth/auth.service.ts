@@ -21,14 +21,12 @@ export class AuthService {
 
 
 async validateUser(email: string, password: string): Promise<any> {
-  // Busca o usuário pelo email
   console.log('JWT Secret from env:', process.env.JWT_SECRET);
 
   const user = await this.userValidationService.findUserByEmail(email);
 
   if (user && await this.comparePasswords(password, user.password)) {
-    // Retorna o usuário, excluindo a senha para segurança
-    const { password, ...result } = user;  // Trocando 'passwordHash' por 'password'
+    const { password, ...result } = user;  
     return result;
   }
 

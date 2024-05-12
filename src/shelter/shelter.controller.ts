@@ -1,9 +1,13 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, Query } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiQuery } from '@nestjs/swagger';
+import { Controller, Get, Post, Put, Delete, Param, Body, Query, UseGuards } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiResponse, ApiQuery, ApiBearerAuth } from '@nestjs/swagger';
 import { ShelterService } from './shelter.service';
 import { CreateShelterDto } from './dto/create-shelter.dto';
 import { UpdateShelterDto } from './dto/update-shelter.dto';
+import { AuthGuard } from '@nestjs/passport';
+import { GetUserId } from 'src/decorators/get-user-id.decorator';
 
+@ApiBearerAuth('BearerAuth')
+@UseGuards(AuthGuard('jwt'))
 @ApiTags('shelters')
 @Controller('shelters')
 export class ShelterController {
@@ -12,8 +16,8 @@ export class ShelterController {
   @Post()
   @ApiOperation({ summary: 'Create a new shelter' })
   @ApiResponse({ status: 201, description: 'Shelter created successfully.' })
-  async create(@Body() createShelterDto: CreateShelterDto) {
-    return this.shelterService.create(createShelterDto);
+  async create(@Body() createShelterDto: CreateShelterDto, @GetUserId() userId: number) {
+    return this.shelterService.create(createShelterDto, userId);
   }
 
   @Get()
@@ -38,8 +42,8 @@ export class ShelterController {
   @Put(':id')
   @ApiOperation({ summary: 'Update a shelter by id' })
   @ApiResponse({ status: 200, description: 'Shelter updated successfully.' })
-  async update(@Param('id') id: number, @Body() updateShelterDto: UpdateShelterDto) {
-    return this.shelterService.update(id, updateShelterDto);
+  async update(@Param('id') id: number, @Body() updateShelterDto: UpdateShelterDto, @GetUserId() userId: number) {
+    return this.shelterService.update(id, updateShelterDto, userId);
   }
 
   @Delete(':id')

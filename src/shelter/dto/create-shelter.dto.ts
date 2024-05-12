@@ -39,8 +39,4 @@ export class CreateShelterDto {
   @IsString()
   needs: string;
 
-  @ApiProperty({ description: 'UserId' })
-  @IsNotEmpty()
-  @IsInt()
-  updatedBy: number; 
 }

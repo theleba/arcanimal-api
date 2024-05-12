@@ -7,7 +7,7 @@ import { UpdateShelterDto } from './dto/update-shelter.dto';
 export class ShelterService {
   constructor(private prisma: PrismaService) {}
 
-  async create(createShelterDto: CreateShelterDto) {
+  async create(createShelterDto: CreateShelterDto, userId: number) {
 
      const existingShelter = await this.prisma.shelter.findUnique({
       where: {
@@ -20,7 +20,10 @@ export class ShelterService {
     }
 
     return this.prisma.shelter.create({
-      data: createShelterDto,
+      data: {
+        ...createShelterDto,
+        updatedBy: userId
+      },
     });
   }
 
@@ -45,7 +48,7 @@ export class ShelterService {
     });
   }
 
-  async update(id: number, updateShelterDto: UpdateShelterDto) {
+  async update(id: number, updateShelterDto: UpdateShelterDto, userId: number) {
 
     if(updateShelterDto.email) {
      const existingShelter = await this.prisma.shelter.findUnique({
@@ -60,7 +63,8 @@ export class ShelterService {
     }
     return this.prisma.shelter.update({
       where: { id },
-      data: updateShelterDto,
+      data: {...updateShelterDto, 
+        updatedBy: userId },
     });
   }
 

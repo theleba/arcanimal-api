@@ -44,8 +44,4 @@ export class UpdateShelterDto {
   @IsOptional()
   needs?: string;
 
-  @ApiProperty({ description: 'UserId' })
-  @IsNotEmpty()
-  @IsInt()
-  updatedBy: number; 
 }
