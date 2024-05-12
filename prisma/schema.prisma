@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  seed = "ts-node prisma/seed.ts"
 }
 
 datasource db {
@@ -20,12 +21,12 @@ model Pet {
   url       String
   found     Boolean
   details   String
-  shelterId Int      
+  shelterId Int?       
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
   updatedBy  Int   
 
-  Shelter   Shelter  @relation(fields: [shelterId], references: [id])
+  Shelter   Shelter?  @relation(fields: [shelterId], references: [id])
 }
 
 model User {
@@ -48,11 +49,11 @@ model Shelter {
   phone       String
   capacity    Int
   occupation  Int
-  description String
-  needs       String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  updatedBy  Int   
+  description String?
+  needs       String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  updatedBy   Int   
 
   Pets        Pet[]
 }

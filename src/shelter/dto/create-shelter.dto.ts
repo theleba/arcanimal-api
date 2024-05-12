@@ -1,4 +1,4 @@
-import { IsEmail, IsInt, IsNotEmpty, IsString, Min } from 'class-validator';
+import { IsArray, IsEmail, IsInt, IsNotEmpty, IsOptional, IsString, Min } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateShelterDto {
@@ -31,12 +31,13 @@ export class CreateShelterDto {
   @IsInt()
   occupation: number; 
 
-  @ApiProperty({ description: 'Detailed description of the shelter' })
+  @ApiProperty({ description: 'Detailed description of the shelter', example:'' })
   @IsString()
+  @IsOptional()
   description: string;
 
   @ApiProperty({ description: 'Current needs of the shelter' })
-  @IsString()
-  needs: string;
+  @IsArray()
+  needs: string[];
 
 }

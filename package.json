@@ -14,7 +14,8 @@
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "migrate": "npx prisma migrate dev",
-    "generate": "npx prisma generate"
+    "generate": "npx prisma generate",
+    "seed": "node prisma/seed.js"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",

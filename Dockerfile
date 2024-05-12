@@ -15,4 +15,4 @@ RUN yarn build
 
 EXPOSE 3000
 
-CMD ["sh", "-c", "yarn migrate && yarn start:dev"]
+CMD ["sh", "-c", "yarn migrate && yarn seed && yarn start:dev"]

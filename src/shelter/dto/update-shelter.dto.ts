@@ -1,4 +1,4 @@
-import { IsEmail, IsInt, IsNotEmpty, IsOptional, IsString, Min } from 'class-validator';
+import { IsArray, IsEmail, IsInt, IsNotEmpty, IsOptional, IsString, Min } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class UpdateShelterDto {
@@ -34,14 +34,14 @@ export class UpdateShelterDto {
   @IsOptional()
   occupation?: number;
 
-  @ApiPropertyOptional({ description: 'Detailed description of the shelter' })
+  @ApiPropertyOptional({ description: 'Detailed description of the shelter', example:'' })
   @IsString()
   @IsOptional()
   description?: string;
 
   @ApiPropertyOptional({ description: 'Current needs of the shelter' })
-  @IsString()
+  @IsArray()
   @IsOptional()
-  needs?: string;
+  needs?: string[];
 
 }
