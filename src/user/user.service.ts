@@ -98,6 +98,33 @@ private toReadUser(user: any): UserReadDto {
   return this.toReadUser(user)
 }
 
+async resetUserPassword(email: string) {
+  const user = await this.prisma.user.findUnique({
+    where: { email },
+  });
+
+  if (!user) {
+    throw new ConflictException('Usuário não encontrado.');
+  }
+
+  const newPassword = generateRandomPassword(8);
+  const hashedPassword = await this.authService.hashPassword(newPassword);
+
+  await this.prisma.user.update({
+    where: { email },
+    data: { password: hashedPassword },
+  });
+
+  await this.mailService.sendRecoverPasswordEmail({
+    name: user.name,
+    email: user.email,
+    password: newPassword  
+  });
+
+  return { message: "Senha resetada com sucesso e e-mail enviado." };
+}
+
+
   async findAll(page: number, limit: number): Promise<UserReadDto[]> {
   const pageNumber = Number(page);
   const limitNumber = Number(limit);
