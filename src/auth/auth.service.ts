@@ -15,18 +15,31 @@ export class AuthService {
     return bcrypt.hash(password, salt);
   }
 
-  async comparePasswords(password: string, storedPasswordHash: string): Promise<boolean> {
-    return bcrypt.compare(password, storedPasswordHash);
+  async comparePasswords(password: string, storedPassword: string): Promise<boolean> {
+  return bcrypt.compare(password, storedPassword);
+}
+
+
+async validateUser(email: string, password: string): Promise<any> {
+  // Busca o usuário pelo email
+  console.log('JWT Secret from env:', process.env.JWT_SECRET);
+
+  const user = await this.userValidationService.findUserByEmail(email);
+
+  if (user && await this.comparePasswords(password, user.password)) {
+    // Retorna o usuário, excluindo a senha para segurança
+    const { password, ...result } = user;  // Trocando 'passwordHash' por 'password'
+    return result;
   }
 
-  async validateUser(email: string, pass: string): Promise<any> {
-    return this.userValidationService.validateUser(email, pass);
-  }
+  return null;
+}
 
-  async login(user: any) {
-    const payload = { username: user.username, sub: user.userId };
-    return {
-      access_token: this.jwtService.sign(payload),
-    };
-  }
+async login(user: any) {
+  const payload = { email: user.email, sub: user.id };
+  return {
+    access_token: this.jwtService.sign(payload),
+  };
+}
+
 }

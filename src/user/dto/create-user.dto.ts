@@ -26,8 +26,4 @@ export class CreateUserDto {
   @IsEnum(Role)
   role: Role;
 
-  @ApiProperty({ description: 'UserId' })
-  @IsNotEmpty()
-  @IsInt()
-  updatedBy: number; 
 }

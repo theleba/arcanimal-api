@@ -25,7 +25,8 @@ import { LocalStrategy } from './auth/strategies/local.strategy';
     AuthModule,
     UserModule,
     PetModule,
-    ShelterModule
+    ShelterModule,
+    
   ],
   controllers: [],
   providers: [ PrismaService, JwtStrategy, LocalStrategy] ,

@@ -10,8 +10,33 @@ import { UserReadDto } from './dto/read-user.dto';
 export class UserService {
   constructor(private prisma: PrismaService, private authService: AuthService) {}
 
+private toReadUser(user: any): UserReadDto {
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      phone: user.phone,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+      updatedBy: user.updatedBy
+    };
+  }
 
-  async createAdmin(createUserDto: CreateUserDto) {
+  private toReadUsers(users: any[]): UserReadDto[] {
+  return users.map(user => ({
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    role: user.role,
+    phone: user.phone,
+    createdAt: user.createdAt,
+    updatedAt: user.updatedAt,
+    updatedBy: user.updatedBy
+  }));
+}
+
+  async createAdmin(createUserDto: CreateUserDto, createdByUserId: number) {
 
      const existingUser = await this.prisma.shelter.findUnique({
       where: {
@@ -25,11 +50,12 @@ export class UserService {
 
   const hashedPassword = await this.authService.hashPassword(createUserDto.password);
 
-  const user = this.prisma.user.create({
+  const user = await this.prisma.user.create({
     data: {
       ...createUserDto,
       password: hashedPassword,
       role: Role.Admin, 
+      updatedBy: createdByUserId,
     },
   });
 
@@ -37,22 +63,9 @@ export class UserService {
 
 }
 
- private toReadUser(user: any): UserReadDto {
-    return {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-      phone: user.phone,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt
-    };
-  }
+ async createVolunteer(createUserDto: CreateUserDto, createdByUserId: number) {
 
-
- async createVolunteer(createUserDto: CreateUserDto) {
-
-  const existingUser = await this.prisma.shelter.findUnique({
+  const existingUser = await this.prisma.user.findUnique({
       where: {
         email: createUserDto.email,
       },
@@ -64,39 +77,44 @@ export class UserService {
 
   const hashedPassword = await this.authService.hashPassword(createUserDto.password);
 
-  const user = this.prisma.user.create({
+  const user = await this.prisma.user.create({
     data: {
       ...createUserDto,
       password: hashedPassword,
       role: Role.Volunteer, 
+      updatedBy: createdByUserId,
     },
   });
 
   return this.toReadUser(user)
 }
 
-  async findAll(page: number, limit: number) {
-    const pageNumber = Number(page);
-    const limitNumber = Number(limit);
+  async findAll(page: number, limit: number): Promise<UserReadDto[]> {
+  const pageNumber = Number(page);
+  const limitNumber = Number(limit);
 
-  return this.prisma.user.findMany({
+  const users = await this.prisma.user.findMany({
     skip: (pageNumber - 1) * limitNumber,
     take: limitNumber,
   });
-  }
+
+  return this.toReadUsers(users);
+}
 
   async findAllWithRole(page: number, limit: number, role: Role) {
 
     const pageNumber = Number(page);
     const limitNumber = Number(limit);
 
-    return this.prisma.user.findMany({
+    const users = await this.prisma.user.findMany({
       where: {
         role: role,
       },
       skip: (pageNumber - 1) * limitNumber,
       take: limitNumber,
     });
+
+    return this.toReadUsers(users);
   }
 
   async findAllWithoutPagination() {
@@ -109,7 +127,7 @@ export class UserService {
     });
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto) {
+  async update(id: number, updateUserDto: UpdateUserDto, updatedByUserId: number) {
 
     if(updateUserDto.email) {
       const existingUser = await this.prisma.shelter.findUnique({
@@ -131,7 +149,9 @@ export class UserService {
 
     return this.prisma.user.update({
       where: { id: id },
-      data: updateUserDto,
+      data: {...updateUserDto,
+        updatedBy: updatedByUserId,
+      },
     });
   }
 

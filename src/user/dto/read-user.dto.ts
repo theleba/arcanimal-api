@@ -21,4 +21,7 @@ export class UserReadDto {
 
   @ApiProperty({ description: 'Last update date of the user account' })
   updatedAt: Date;
+
+  @ApiProperty({ description: 'Last update user id' })
+  updatedBy: String;
 }

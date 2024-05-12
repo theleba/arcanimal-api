@@ -25,4 +25,10 @@ export class UserValidationService {
     const { password, ...result } = user;
     return result;
   }
+
+   async findUserByEmail(email: string) {
+    return this.prisma.user.findUnique({
+      where: { email },
+    });
+  }
 }
