@@ -1,7 +1,6 @@
 import { PrismaClient,Role } from '@prisma/client'
 import * as bcrypt from 'bcryptjs'
 
-const prisma = new PrismaClient()
 
 async function hashPassword(password) {
     const saltRounds = 10; 
@@ -10,7 +9,7 @@ async function hashPassword(password) {
     return hashedPassword;
   }
   
-  async function main() {
+  export async function userSeed(prisma:PrismaClient) {
     const users = [
       { email: 'arcanimal.dev@gmail.com', name: 'Admin ArcAnimal', password: 'ecadLEnDAyAn', role: Role.admin },
       { email: 'soulebarbosa@gmail.com', name: 'Admin DEV', password: 'Teste@123', role:Role.admin },
@@ -32,15 +31,5 @@ async function hashPassword(password) {
         },
       })
     }
-   
-
   }
-  main()
-  .then(async () => {
-    await prisma.$disconnect()
-  })
-  .catch(async (e) => {
-    console.error(e)
-    await prisma.$disconnect()
-    process.exit(1)
-  })
+  
