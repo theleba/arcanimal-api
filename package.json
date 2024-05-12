@@ -15,7 +15,10 @@
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "migrate": "npx prisma migrate dev",
     "generate": "npx prisma generate",
-    "seed": "node prisma/seed.js"
+    "seed": "npx prisma db seed"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
