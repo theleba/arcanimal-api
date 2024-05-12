@@ -11,9 +11,12 @@ async function hashPassword(password) {
   
   export async function userSeed(prisma:PrismaClient) {
     const users = [
-      { email: 'arcanimal.dev@gmail.com', name: 'Admin ArcAnimal', password: 'ecadLEnDAyAn', role: Role.admin },
-      { email: 'soulebarbosa@gmail.com', name: 'Admin DEV', password: 'Teste@123', role:Role.admin },
-      { email: 'arcanimal.voluntarios@gmail.com', name: 'Voluntário ArcAnimal', password: 'ecadLEnDAyAn', role:Role.volunteer  }
+      { email: 'arcanimal.dev@gmail.com', name: 'Admin ArcAnimal', password: 'ecadLEnDAyAn', role: Role.admin, phone:"",
+      updatedBy: 0 },
+      { email: 'soulebarbosa@gmail.com', name: 'Admin DEV', password: 'Teste@123', role:Role.admin, phone:"",
+      updatedBy: 0 },
+      { email: 'arcanimal.voluntarios@gmail.com', name: 'Voluntário ArcAnimal', password: 'ecadLEnDAyAn', role:Role.volunteer, phone:"",
+      updatedBy: 0  }
     ];
     
     for (let user of users) {
@@ -21,14 +24,7 @@ async function hashPassword(password) {
       await prisma.user.upsert({
         where: { email: user.email},
         update: {},
-        create:{
-          email:user.email, 
-          name: user.name,
-          password: user.password, 
-          role:user.role,
-          phone:"",
-          updatedBy: 0
-        },
+        create:{...user},
       })
     }
   }
