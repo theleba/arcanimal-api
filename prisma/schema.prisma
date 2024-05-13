@@ -52,7 +52,7 @@ model Shelter {
   occupation  Int
   owner String?
   needs       String[] @default([])
-  other_needs String @default('')
+  other_needs String @default("")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   updatedBy   Int   
