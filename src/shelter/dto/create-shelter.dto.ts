@@ -47,8 +47,7 @@ export class CreateShelterDto {
   needs: string[];
 
   @ApiProperty({ description: 'Other needs of the shelter' })
-  @IsArray()
-  @IsOptional()
-  other_needs: string[];
+  @IsString()
+  other_needs: string;
 
 }
