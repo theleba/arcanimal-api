@@ -6,59 +6,59 @@ import { ImagesService } from 'src/images/images.service';
 
 @Injectable()
 export class PetService {
-  constructor(private prisma: PrismaService, private imagesService: ImagesService) {}
+	constructor(private prisma: PrismaService, private imagesService: ImagesService) {}
 
-  async create(createPetDto: CreatePetDto) {
-        const { shelterId, imageBase64, ...rest } = createPetDto;
+	async create(createPetDto: CreatePetDto) {
+		const { shelterId, imageBase64, ...rest } = createPetDto;
 
-        let imagePath = null;
-        if (imageBase64) {
-            imagePath = await this.imagesService.saveImage(imageBase64);
-        }
+		let imagePath = null;
+		if (imageBase64) {
+			imagePath = await this.imagesService.saveImage(imageBase64);
+		}
 
-        return this.prisma.pet.create({
-            data: {
-                ...rest,
-                Shelter: {
-                    connect: { id: shelterId },
-                },
-                url: imagePath
-            },
-        });
-    }
+		return this.prisma.pet.create({
+			data: {
+				...rest,
+				Shelter: {
+					connect: { id: shelterId },
+				},
+				url: imagePath
+			},
+		});
+	}
 
-  async findAll(page: number, limit: number) {
+	async findAll(page: number, limit: number) {
 
-     const pageNumber = Number(page);
-    const limitNumber = Number(limit);
+		let queryParams: any = {};
+		if (page) {
+			const pageNumber = Number(page);
+			queryParams.skip = (pageNumber - 1) * limit;
+			queryParams.take = limit;
+		}
+
+		const pets = await this.prisma.pet.findMany(queryParams);
+		const total = await this.prisma.pet.count();
+		return {data: pets, total}
+
+	}
 
 
-    return this.prisma.pet.findMany({
-      skip: (pageNumber - 1) * limitNumber,
-      take: limitNumber,
-    });
-  }
+	async findOne(id: number) {
+		return this.prisma.pet.findUnique({
+			where: { id },
+		});
+	}
 
-  async findAllWithoutPagination() {
-    return this.prisma.pet.findMany();
-  }
+	async update(id: number, updatePetDto: UpdatePetDto) {
+		return this.prisma.pet.update({
+			where: { id },
+			data: updatePetDto,
+		});
+	}
 
-  async findOne(id: number) {
-    return this.prisma.pet.findUnique({
-      where: { id },
-    });
-  }
-
-  async update(id: number, updatePetDto: UpdatePetDto) {
-    return this.prisma.pet.update({
-      where: { id },
-      data: updatePetDto,
-    });
-  }
-
-  async remove(id: number) {
-    return this.prisma.pet.delete({
-      where: { id },
-    });
-  }
+	async remove(id: number) {
+		return this.prisma.pet.delete({
+			where: { id },
+		});
+	}
 }

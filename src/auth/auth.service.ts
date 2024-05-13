@@ -5,38 +5,38 @@ import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class AuthService {
-  constructor(
-    private userValidationService: UserValidationService, 
-    private jwtService: JwtService,
-  ) {}
+	constructor(
+		private userValidationService: UserValidationService, 
+		private jwtService: JwtService,
+	) {}
 
-  async hashPassword(password: string): Promise<string> {
-    const salt = await bcrypt.genSalt();
-    return bcrypt.hash(password, salt);
-  }
+	async hashPassword(password: string): Promise<string> {
+		const salt = await bcrypt.genSalt();
+		return bcrypt.hash(password, salt);
+	}
 
-  async comparePasswords(password: string, storedPassword: string): Promise<boolean> {
-  return bcrypt.compare(password, storedPassword);
-}
+	async comparePasswords(password: string, storedPassword: string): Promise<boolean> {
+		return bcrypt.compare(password, storedPassword);
+	}
 
 
-async validateUser(email: string, password: string): Promise<any> {
+	async validateUser(email: string, password: string): Promise<any> {
 
-  const user = await this.userValidationService.findUserByEmail(email);
+		const user = await this.userValidationService.findUserByEmail(email);
 
-  if (user && await this.comparePasswords(password, user.password)) {
-    const { password, ...result } = user;  
-    return result;
-  }
+		if (user && await this.comparePasswords(password, user.password)) {
+			const { password, ...result } = user;  
+			return result;
+		}
 
-  return null;
-}
+		return null;
+	}
 
-async login(user: any) {
-  const payload = { email: user.email, sub: user.id };
-  return {
-    access_token: this.jwtService.sign(payload),
-  };
-}
+	async login(user: any) {
+		const payload = { email: user.email, sub: user.id };
+		return {
+			access_token: this.jwtService.sign(payload),
+		};
+	}
 
 }

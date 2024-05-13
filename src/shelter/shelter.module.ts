@@ -4,8 +4,9 @@ import { ShelterService } from './shelter.service';
 import { PrismaService } from 'prisma/prisma.service';
 
 @Module({
-  controllers: [ShelterController],
-  providers: [ShelterService, PrismaService],
-  exports: [ShelterService]
+	controllers: [ShelterController],
+	providers: [ShelterService, PrismaService],
+	exports: [ShelterService]
 })
+
 export class ShelterModule {}

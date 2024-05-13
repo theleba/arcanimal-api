@@ -6,9 +6,10 @@ import { AuthModule } from '../auth/auth.module';
 import { EmailModule } from '../mail/mail.module';  
 
 @Module({
-  imports: [AuthModule, EmailModule],  
-  controllers: [UserController],
-  providers: [UserService, PrismaService],
-  exports: [UserService]
+	imports: [AuthModule, EmailModule],  
+	controllers: [UserController],
+	providers: [UserService, PrismaService],
+	exports: [UserService]
 })
+
 export class UserModule {}

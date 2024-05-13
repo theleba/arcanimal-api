@@ -8,15 +8,16 @@ import { AuthController } from './auth.controller';
 import { JwtStrategy } from './strategies/jwt.strategy';
 
 @Module({
-  imports: [
-    PassportModule,
-    JwtModule.register({
-      secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '60m' },
-    }),
-  ],
-  controllers: [AuthController],
-  providers: [AuthService, UserValidationService, PrismaService, JwtStrategy],
-  exports: [AuthService, UserValidationService, JwtModule]
+	imports: [
+		PassportModule,
+		JwtModule.register({
+		secret: process.env.JWT_SECRET,
+		signOptions: { expiresIn: '60m' },
+		}),
+	],
+	controllers: [AuthController],
+	providers: [AuthService, UserValidationService, PrismaService, JwtStrategy],
+	exports: [AuthService, UserValidationService, JwtModule]
 })
+
 export class AuthModule {}
