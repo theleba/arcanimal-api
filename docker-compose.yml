@@ -19,7 +19,7 @@ services:
     container_name: arcanimal_db
     image: postgres:16
     ports:
-      - "5432:5432"
+      - "9668:5432"
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
