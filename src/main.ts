@@ -23,6 +23,8 @@ async function bootstrap() {
     validationError: { target: false }
   }));
 
+  app.enableCors();
+
   const config = new DocumentBuilder()
   .setTitle('Arcanimal API')
   .setDescription('API para a plataforma Arcanimal')
