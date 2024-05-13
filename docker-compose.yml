@@ -4,7 +4,7 @@ services:
     build: .
     command: yarn run start:dev
     ports:
-      - "3000:3000"
+      - "8000:8000"
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - JWT_SECRET=${JWT_SECRET}
