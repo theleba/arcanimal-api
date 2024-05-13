@@ -22,13 +22,14 @@ import { UpdateShelterDto } from './dto/update-shelter.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUserId } from 'src/decorators/get-user-id.decorator';
 
-@ApiBearerAuth('BearerAuth')
-@UseGuards(AuthGuard('jwt'))
+
 @ApiTags('shelters')
 @Controller('shelters')
 export class ShelterController {
   constructor(private readonly shelterService: ShelterService) {}
 
+  @ApiBearerAuth('BearerAuth')
+  @UseGuards(AuthGuard('jwt'))
   @Post()
   @ApiOperation({ summary: 'Create a new shelter' })
   @ApiResponse({ status: 201, description: 'Shelter created successfully.' })
@@ -68,6 +69,8 @@ export class ShelterController {
     return this.shelterService.findOne(id);
   }
 
+  @ApiBearerAuth('BearerAuth')
+  @UseGuards(AuthGuard('jwt'))
   @Put(':id')
   @ApiOperation({ summary: 'Update a shelter by id' })
   @ApiResponse({ status: 200, description: 'Shelter updated successfully.' })
@@ -79,6 +82,8 @@ export class ShelterController {
     return this.shelterService.update(id, updateShelterDto, userId);
   }
 
+  @ApiBearerAuth('BearerAuth')
+  @UseGuards(AuthGuard('jwt'))
   @Delete(':id')
   @ApiOperation({ summary: 'Delete a shelter by id' })
   @ApiResponse({ status: 200, description: 'Shelter deleted successfully.' })
