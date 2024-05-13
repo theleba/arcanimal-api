@@ -50,8 +50,7 @@ export class UpdateShelterDto {
   needs?: string[];
 
   @ApiPropertyOptional({ description: 'Other needs of the shelter' })
-  @IsArray()
-  @IsOptional()
-  other_needs?: string[];
+  @IsString()
+  other_needs: string;
 
 }

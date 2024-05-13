@@ -33,4 +33,6 @@ export class ShelterReadDto {
 
   @ApiProperty({ description: 'Last update date of the shelter record' })
   updatedAt: Date;
+  @ApiProperty({description: 'Current other needs of the shelter record'})
+other_needs:string;
 }
