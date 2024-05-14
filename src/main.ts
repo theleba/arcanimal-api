@@ -11,8 +11,8 @@ async function bootstrap() {
 
   const app = await NestFactory.create(AppModule);
   app.use('/uploads', express.static('/usr/src/app/uploads'));
-  
-  app.use(bodyParser.json({ limit: '50mb' }));  
+
+  app.use(bodyParser.json({ limit: '50mb' }));
   app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
   app.useGlobalPipes(new ValidationPipe({
@@ -26,15 +26,15 @@ async function bootstrap() {
   app.enableCors();
 
   const config = new DocumentBuilder()
-  .setTitle('Arcanimal API')
-  .setDescription('API para a plataforma Arcanimal')
-  .setVersion('1.0')
-  .addBearerAuth(
-    { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
-    'BearerAuth', 
-  )
-  .build();
-  
+    .setTitle('Arcanimal API')
+    .setDescription('API para a plataforma Arcanimal')
+    .setVersion('1.0')
+    .addBearerAuth(
+      { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
+      'BearerAuth',
+    )
+    .build();
+
   const document = SwaggerModule.createDocument(app, config);
 
   SwaggerModule.setup('api', app, document);
