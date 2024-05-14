@@ -8,6 +8,10 @@ import {
 	Body,
 	Query,
 	UseGuards,
+  UseInterceptors,
+  FileTypeValidator,
+  ParseFilePipe,
+  UploadedFile,
 } from '@nestjs/common';
 import {
 	ApiTags,
@@ -21,6 +25,7 @@ import { CreateShelterDto } from './dto/create-shelter.dto';
 import { UpdateShelterDto } from './dto/update-shelter.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUserId } from 'src/decorators/get-user-id.decorator';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('shelters')
 @Controller('shelters')
@@ -38,6 +43,25 @@ export class ShelterController {
 	) {
 		return this.shelterService.create(createShelterDto, userId);
 	}
+
+
+  @ApiBearerAuth('BearerAuth')
+  @UseGuards(AuthGuard('jwt'))
+  @Post('csv-import')
+  @UseInterceptors(FileInterceptor('csv'))
+  @ApiOperation({ summary: 'Create shelters by CSV file' })
+  @ApiResponse({ status: 201, description: 'Shelters created successfully.' })
+  async importCsv(
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [new FileTypeValidator({ fileType: 'text/csv' })],
+      }),
+    )
+    csv: Express.Multer.File,
+    @GetUserId() userId: number,
+  ) {
+    return this.shelterService.importCsv(csv, userId);
+  }
 
 	@Get()
 	@ApiOperation({ summary: 'Retrieve all shelters with optional pagination' })
