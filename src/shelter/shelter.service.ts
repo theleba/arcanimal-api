@@ -1,12 +1,13 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
 import { CreateShelterDto } from './dto/create-shelter.dto';
 import { UpdateShelterDto } from './dto/update-shelter.dto';
 import { Prisma } from '@prisma/client';
+import { ShelterCsvParser } from './shelter-csv-parser';
 
 @Injectable()
 export class ShelterService {
-	constructor(private prisma: PrismaService) {}
+	constructor(private prisma: PrismaService, private csvParser: ShelterCsvParser) {}
 
 	async create(createShelterDto: CreateShelterDto, userId: number) {
 		const existingShelter = await this.prisma.shelter.findUnique({
@@ -26,6 +27,36 @@ export class ShelterService {
 			},
 		});
 	}
+
+  async importCsv(csv: Express.Multer.File, userId: number) {
+    const shelters = await this.csvParser.parse(csv);
+
+    const sheltersEmails = shelters.map(({ email }) => email);
+
+    if (sheltersEmails.length !== new Set(sheltersEmails).size) {
+      throw new BadRequestException('Duplicated emails on CSV file');
+    }
+
+    const existentEmails = await this.prisma.shelter.findMany({
+      select: {
+        email: true,
+      },
+      where: {
+        email: { in: sheltersEmails },
+      },
+    });
+
+    if (existentEmails.length > 0) {
+      throw new BadRequestException(
+        `Email(s) [${existentEmails.map(({ email }) => email).join(', ')}] already exists`,
+      );
+    }
+
+    return this.prisma.shelter.createMany({
+      data: shelters.map((shelter) => ({ ...shelter, updatedBy: userId })),
+    });
+  }
+
 
 	async find(findOptions: {
 		pagination?: { page: number; limit: number };
