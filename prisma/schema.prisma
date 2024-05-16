@@ -39,11 +39,22 @@ model User {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
   updatedBy  Int   
+
+  refreshTokens RefreshToken[] 
+}
+
+model RefreshToken {
+  id         Int      @id @default(autoincrement())
+  userId     Int
+  token      String   @unique
+  expiryDate DateTime
+
+  user User @relation(fields: [userId], references: [id])
 }
 
 model Shelter {
   id          Int    @id @default(autoincrement())
-  location    String
+  location    String 
   address     String? 
   name        String
   email       String @unique
