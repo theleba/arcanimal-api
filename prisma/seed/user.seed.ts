@@ -1,7 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 import * as bcrypt from 'bcryptjs'
-import { Role } from 'src/enums/role.enum';
-
+import { Role } from '../../src/enums/role.enum';
 
 async function hashPassword(password) {
     const saltRounds = 10; 

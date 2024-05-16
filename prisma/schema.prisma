@@ -1,6 +1,7 @@
 generator client {
   provider = "prisma-client-js"
-  seed = "ts-node prisma/seed.ts"
+  seed = "ts-node prisma/seed/seed.ts"
+  binaryTargets = ["native", "debian-openssl-1.1.x", "debian-openssl-3.0.x", "linux-musl", "linux-musl-openssl-3.0.x"]
 }
 
 datasource db {
