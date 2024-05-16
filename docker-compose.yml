@@ -9,6 +9,8 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
     restart: always
+    networks:
+      - arcanimal_network
     volumes:
       - postgres_data:/var/lib/postgresql/data
     env_file:
@@ -24,6 +26,8 @@ services:
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - JWT_SECRET=${JWT_SECRET}
+    networks:
+      - arcanimal_network
     volumes:
       - ./src:/usr/src/app/src
       - ./uploads:/usr/src/app/uploads
@@ -32,6 +36,9 @@ services:
     restart: always
     env_file:
       - .env
+
+networks:
+  arcanimal_network:
 
 volumes:
   postgres_data:
