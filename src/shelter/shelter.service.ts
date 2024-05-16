@@ -20,45 +20,52 @@ export class ShelterService {
 		});
 	}
 
-	async importData(file: Express.Multer.File, userId: number) {
+	 async importData(file: Express.Multer.File, userId: number) {
     const shelters = this.parseFile(file);
-  
+    
     return this.prisma.shelter.createMany({
       data: shelters.map((shelter) => ({ ...shelter, updatedBy: userId })),
     });
   }
 
-  	private parseFile(file: Express.Multer.File): CreateShelterDto[] {
+  private parseFile(file: Express.Multer.File): CreateShelterDto[] {
     const workbook = XLSX.read(file.buffer, { type: 'buffer' });
 
+    // Parse Cadastro sheet
     const cadastroSheet = workbook.Sheets['Cadastro'];
     if (!cadastroSheet) {
       throw new BadRequestException('Sheet "cadastro" not found');
     }
-    const cadastroData = XLSX.utils.sheet_to_json(cadastroSheet);
+    const cadastroData = XLSX.utils.sheet_to_json<Record<string, any>>(cadastroSheet);
 
+    // Parse Monitoramento sheet
     const monitoramentoSheet = workbook.Sheets['Monitoramento'];
     if (!monitoramentoSheet) {
       throw new BadRequestException('Sheet "monitoramento" not found');
     }
-    const monitoramentoData = XLSX.utils.sheet_to_json(monitoramentoSheet);
+    const monitoramentoData = XLSX.utils.sheet_to_json<Record<string, any>>(monitoramentoSheet);
 
     // Parse Necessidades sheet
     const necessidadesSheet = workbook.Sheets['Necessidades dos abrigos'];
     if (!necessidadesSheet) {
       throw new BadRequestException('Sheet "necessidades" not found');
     }
-    const necessidadesData = XLSX.utils.sheet_to_json(necessidadesSheet);
+    const necessidadesData = XLSX.utils.sheet_to_json<Record<string, any>>(necessidadesSheet);
 
-    return cadastroData.map((data: any) => {
-      const monitoramento = monitoramentoData.find((m: any) => m.name === data.name);
-      const necessidades = necessidadesData.find((n: any) => n.name === data.name);
+    const headers = Object.keys(necessidadesData[0]);
+    const needKeys = headers.slice(1, headers.length); // Skip the first column which is the name of the shelter
 
-      const needs = [];
-      for (let i = 1; i <= 15; i++) {
-        if (necessidades[`B${i}`]) {
-          needs.push(necessidades[`B${i}`]);
-        }
+    return cadastroData.map((data: Record<string, any>) => {
+      const monitoramento = monitoramentoData.find((m: any) => m['Nome do abrigo'] === data['Nome do abrigo']);
+      const necessidades = necessidadesData.find((n: any) => n['Nome do abrigo'] === data['Nome do abrigo']);
+
+      const needs: string[] = [];
+      if (necessidades) {
+        needKeys.forEach((key) => {
+          if (necessidades[key] === true || necessidades[key] === '✔' || necessidades[key] === '1' || necessidades[key] === 'TRUE') {
+            needs.push(key);
+          }
+        });
       }
 
       return {
@@ -66,8 +73,8 @@ export class ShelterService {
         address: `${data.Endereço} - ${data.Bairro} - ${data.CEP}`,
         name: data['Nome do abrigo'],
         email: data.Email,
-        phone: String(data['Contato da pessoa responsável'] )|| '-',
-        spaces: monitoramento ? monitoramento['Número de vagas disponíveis'] : null,
+        phone: String(data['Contato da pessoa responsável']) || '-',
+        spaces: monitoramento ? monitoramento['Número de vagas disponíveis'] : 0,
         owner: data['Nome da pessoa responsável'],
         needs,
         other_needs: '',
