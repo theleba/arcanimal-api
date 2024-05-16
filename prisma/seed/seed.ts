@@ -1,9 +1,8 @@
-import { shelterSeed } from "./shelter.seed"
 import { userSeed } from "./user.seed"
 import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
-Promise.all([userSeed(prisma), shelterSeed(prisma)])
+Promise.all([userSeed(prisma)])
   .then(async () => {
     await prisma.$disconnect()
   })

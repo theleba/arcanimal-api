@@ -1,5 +1,6 @@
-import { PrismaClient,Role } from '@prisma/client'
+import { PrismaClient } from '@prisma/client'
 import * as bcrypt from 'bcryptjs'
+import { Role } from 'src/enums/role.enum';
 
 
 async function hashPassword(password) {
@@ -11,11 +12,11 @@ async function hashPassword(password) {
   
   export async function userSeed(prisma:PrismaClient) {
     const users = [
-      { email: 'arcanimal.dev@gmail.com', name: 'Admin ArcAnimal', password: 'ecadLEnDAyAn', role: Role.admin, phone:"",
+      { email: 'arcanimal.dev@gmail.com', name: 'Admin ArcAnimal', password: 'ecadLEnDAyAn', role: Role.Admin, phone:"",
       updatedBy: 0 },
-      { email: 'soulebarbosa@gmail.com', name: 'Admin DEV', password: 'Teste@123', role:Role.admin, phone:"",
+      { email: 'soulebarbosa@gmail.com', name: 'Admin DEV', password: 'Teste@123', role:Role.Admin, phone:"",
       updatedBy: 0 },
-      { email: 'arcanimal.voluntarios@gmail.com', name: 'Voluntário ArcAnimal', password: 'ecadLEnDAyAn', role:Role.volunteer, phone:"",
+      { email: 'arcanimal.voluntarios@gmail.com', name: 'Voluntário ArcAnimal', password: 'ecadLEnDAyAn', role:Role.Volunteer, phone:"",
       updatedBy: 0  }
     ];
     

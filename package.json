@@ -33,6 +33,7 @@
     "@prisma/client": "^5.13.0",
     "@types/file-type": "^10.9.1",
     "@types/passport-jwt": "^4.0.1",
+    "@types/xlsx": "^0.0.36",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
     "class-transformer": "^0.5.1",
@@ -47,7 +48,8 @@
     "passport-local": "^1.0.0",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
-    "swagger-ui-express": "^5.0.0"
+    "swagger-ui-express": "^5.0.0",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",

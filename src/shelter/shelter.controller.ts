@@ -12,6 +12,7 @@ import {
   FileTypeValidator,
   ParseFilePipe,
   UploadedFile,
+  BadRequestException,
 } from '@nestjs/common';
 import {
 	ApiTags,
@@ -19,6 +20,8 @@ import {
 	ApiResponse,
 	ApiQuery,
 	ApiBearerAuth,
+	ApiConsumes,
+	ApiBody,
 } from '@nestjs/swagger';
 import { ShelterService } from './shelter.service';
 import { CreateShelterDto } from './dto/create-shelter.dto';
@@ -45,22 +48,40 @@ export class ShelterController {
 	}
 
 
-  @ApiBearerAuth('BearerAuth')
+	 @ApiBearerAuth('BearerAuth')
   @UseGuards(AuthGuard('jwt'))
-  @Post('csv-import')
-  @UseInterceptors(FileInterceptor('csv'))
-  @ApiOperation({ summary: 'Create shelters by CSV file' })
-  @ApiResponse({ status: 201, description: 'Shelters created successfully.' })
-  async importCsv(
+  @Post('import-data')
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiOperation({ summary: 'Import shelters data from XLSX file' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: 'Upload file',
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  async importData(
     @UploadedFile(
       new ParseFilePipe({
-        validators: [new FileTypeValidator({ fileType: 'text/csv' })],
+        validators: [
+          new FileTypeValidator({ fileType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }),
+        ],
       }),
     )
-    csv: Express.Multer.File,
+    file: Express.Multer.File,
     @GetUserId() userId: number,
   ) {
-    return this.shelterService.importCsv(csv, userId);
+    if (!file) {
+      throw new BadRequestException('No file uploaded');
+    }
+
+    return this.shelterService.importData(file, userId);
   }
 
 	@Get()

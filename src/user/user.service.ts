@@ -44,7 +44,7 @@ export class UserService {
 
 	async createAdmin(createUserDto: CreateUserDto, createdByUserId: number) {
 
-		const existingUser = await this.prisma.shelter.findUnique({
+		const existingUser = await this.prisma.user.findUnique({
 			where: {
 				email: createUserDto.email,
 			},
@@ -168,7 +168,7 @@ export class UserService {
  	 async update(id: number, updateUserDto: UpdateUserDto, updatedByUserId: number) {
 
 		if(updateUserDto.email) {
-		const existingUser = await this.prisma.shelter.findUnique({
+		const existingUser = await this.prisma.user.findUnique({
 			where: {
 			email: updateUserDto.email,
 			},

@@ -57,10 +57,9 @@ model Shelter {
   location    String 
   address     String? 
   name        String
-  email       String @unique
+  email       String?
   phone       String
-  capacity    Int
-  occupation  Int
+  spaces    Int?
   owner String?
   needs       String[] @default([])
   other_needs String @default("")

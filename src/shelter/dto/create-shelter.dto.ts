@@ -19,6 +19,7 @@ export class CreateShelterDto {
 
   @ApiProperty({ description: 'Email address of the shelter' })
   @IsEmail()
+  @IsOptional()
   email: string;
 
   @ApiProperty({ description: 'Phone number of the shelter' })
@@ -26,15 +27,10 @@ export class CreateShelterDto {
   @IsString()
   phone: string;
 
-  @ApiProperty({ description: 'Capacity of the shelter in terms of number of pets it can accommodate' })
+  @ApiProperty({ description: 'Available spaces of the shelter in terms of number of pets it can accommodate' })
   @IsInt()
   @Min(0)
-  capacity: number;
-
-  @ApiProperty({ description: 'Occupation of the shelter in terms of number of pets that are sheltered ' })
-  @IsNotEmpty()
-  @IsInt()
-  occupation: number; 
+  spaces: number;
 
   @ApiProperty({ description: 'Detailed owner of the shelter', example:'' })
   @IsString()

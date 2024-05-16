@@ -27,17 +27,11 @@ export class UpdateShelterDto {
   @IsOptional()
   phone?: string;
 
-  @ApiPropertyOptional({ description: 'Capacity of the shelter in terms of number of pets it can accommodate' })
+  @ApiPropertyOptional({ description: 'Available spaces of the shelter in terms of number of pets it can accommodate' })
   @IsInt()
   @Min(0)
   @IsOptional()
-  capacity?: number;
-
-  @ApiPropertyOptional({ description: 'Occupation of the shelter in terms of number of pets that are sheltered ' })
-  @IsInt()
-  @Min(0)
-  @IsOptional()
-  occupation?: number;
+  spaces?: number;
 
   @ApiPropertyOptional({ description: 'Detailed owner of the shelter', example:'' })
   @IsString()
