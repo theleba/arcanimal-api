@@ -14,9 +14,10 @@
     "start:prod": "node dist/src/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "migrate": "npx prisma migrate dev",
+    "migrate:prod": "npx prisma migrate deploy",
     "generate": "npx prisma generate",
     "seed": "npx prisma db seed",
-    "start:migrate:prod": "yarn generate && yarn migrate && yarn seed && yarn start:prod"
+    "start:migrate:prod": "yarn generate && yarn migrate:prod && yarn seed && yarn start:prod"
   },
   "prisma": {
     "seed": "ts-node prisma/seed/seed.ts"
