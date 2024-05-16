@@ -13,7 +13,7 @@ services:
       - ./uploads:/usr/src/app/uploads
     depends_on:
       - db
-    restart: on-failure
+    restart: always
 
   db:
     container_name: arcanimal_db
@@ -24,6 +24,7 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
+    restart: always
     volumes:
       - postgres_data:/var/lib/postgresql/data
 volumes:
