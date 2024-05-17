@@ -76,7 +76,7 @@ export class ShelterService {
         phone: String(data['Contato da pessoa responsável']) || '-',
         spaces: monitoramento ? monitoramento['Número de vagas disponíveis'] : 0,
         owner: data['Nome da pessoa responsável'],
-        needs,
+        needs: needs.map((need) => need.replace(/'$/, '')),
         other_needs: '',
       };
     });

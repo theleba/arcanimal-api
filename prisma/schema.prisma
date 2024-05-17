@@ -60,7 +60,9 @@ model Shelter {
   name        String
   email       String?
   phone       String
-  spaces    Int?
+  spaces      Int?
+  ocuppation Int? 
+  capacity    Int?
   owner String?
   needs       String[] @default([])
   other_needs String @default("")
