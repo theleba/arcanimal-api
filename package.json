@@ -17,7 +17,7 @@
     "migrate:prod": "npx prisma migrate deploy",
     "generate": "npx prisma generate",
     "seed": "npx prisma db seed",
-    "start:migrate:prod": "yarn generate && yarn migrate:prod && yarn seed && yarn start:prod"
+    "start:migrate:prod": "yarn migrate:prod && yarn generate && yarn seed && yarn start:prod"
   },
   "prisma": {
     "seed": "ts-node prisma/seed/seed.ts"
