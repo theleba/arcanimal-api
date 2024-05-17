@@ -29,12 +29,10 @@ export class UpdateShelterDto {
 
   @ApiPropertyOptional()
   @IsInt()
-  @Min(0)
   occupation: number;
 
   @ApiProperty()
   @IsInt()
-  @Min(0)
   capacity: number;
 
   @ApiPropertyOptional({ description: 'Detailed owner of the shelter', example:'' })

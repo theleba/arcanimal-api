@@ -27,13 +27,11 @@ export class CreateShelterDto {
   @ApiProperty({ description: 'Available spaces of the shelter in terms of number of pets it can accommodate' })
   @IsInt()
   @IsOptional()
-  @Min(0)
   occupation?: number;
 
   @ApiProperty({ description: 'Available spaces of the shelter in terms of number of pets it can accommodate' })
   @IsInt()
   @IsOptional()
-  @Min(0)
   capacity?: number;
 
   @ApiProperty({ description: 'Detailed owner of the shelter', example:'' })
