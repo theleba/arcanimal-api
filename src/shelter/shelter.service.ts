@@ -95,6 +95,7 @@ export class ShelterService {
 		const { pagination, filters } = findOptions;
 		const queryParams: Prisma.ShelterFindManyArgs = {
 			where: {},
+			orderBy: { name: 'asc' }
 		};
 
 		if (pagination && pagination.page) {
@@ -105,12 +106,6 @@ export class ShelterService {
 
 		if (filters) {
 			const { localOccupation, location } = filters;
-
-			if (localOccupation) {
-				queryParams.where.occupation = {
-				lt: localOccupation,
-				};
-			}
 
 			if (location) {
 				queryParams.where.location = location;
