@@ -68,21 +68,25 @@ export class ShelterService {
         });
       }
 
-      return {
-        location: data.Cidade,
-        address: `${data.Endereço} - ${data.Bairro} - ${data.CEP}`,
-        name: data['Nome do abrigo'],
-        email: data.Email,
-        phone: String(data['Contato da pessoa responsável']) || '-',
-        spaces: monitoramento ? monitoramento['Número de vagas disponíveis'] : 0,
-        owner: data['Nome da pessoa responsável'],
-        needs: needs.map((need) => need.replace(/'$/, '')),
-        other_needs: '',
-      };
+		const endereco = [data.Endereço, data.Bairro, data.CEP].filter(Boolean).join(' - ');
+
+		const capacidadeTotal = monitoramento ? parseInt(monitoramento['Qual a capacidade total de animais do Abrigo?'], 10) : 0;
+		const vagasDisponiveis = monitoramento ? parseInt(monitoramento['Número de vagas disponíveis'], 10) : 0;
+
+		return {
+			location: data.Cidade,
+			address: endereco,
+			name: data['Nome do abrigo'],
+			email: data.Email,
+			phone: String(data['Contato da pessoa responsável'] || '') ,
+			capacity: capacidadeTotal,
+			occupation: capacidadeTotal - vagasDisponiveis,
+			owner: data['Nome da pessoa responsável'],
+			needs: needs.map((need) => need.replace(/'$/, '')),
+			other_needs: '',
+		};
     });
   }
-
-
 
 	async find(findOptions: {
 		pagination?: { page: number; limit: number };
@@ -103,7 +107,7 @@ export class ShelterService {
 			const { localOccupation, location } = filters;
 
 			if (localOccupation) {
-				queryParams.where.spaces = {
+				queryParams.where.occupation = {
 				lt: localOccupation,
 				};
 			}
