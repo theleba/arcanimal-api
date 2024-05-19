@@ -60,7 +60,9 @@ model Shelter {
   name        String
   email       String?
   phone       String?
-  owner String?
+  owner       String?
+  occupation  Int?
+  capacity    Int?
   needs       String[] @default([])
   other_needs String @default("")
   createdAt   DateTime @default(now())
